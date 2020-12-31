@@ -40,7 +40,7 @@ class VendorModel(Base):
         return session.query(cls).filter(cls.id == id).first()
 
     @classmethod
-    def query_vendor_by_kwargs(cls, **kwargs):
+    def query_vendor_by_kwargs(cls, *args, **kwargs):
         try:
             list_of_vendors = session.query(cls).filter_by(**kwargs).all()
         except InvalidRequestError as e:
@@ -84,12 +84,6 @@ class VendorModel(Base):
             return True, ''
 
     def save_to_db(self):
-        if self not in session:
-            session.add(self)
-            session.commit()
-
-
-
-    def put_to_db(self):
-        pass
-
+        # if self not in session:
+        session.add(self)
+        session.commit()

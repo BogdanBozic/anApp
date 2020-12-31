@@ -56,29 +56,29 @@ def edit_vendor(id):
     payload = request.get_json()
     if not get_vendor_by_id(id):
         return jsonify({'error': 'Vendor with id {} does not exist.'.format(id)}), 404
-    updated_vendor = VendorModel
+    vendor = VendorModel.query_vendor_by_id(id)
     try:
-        updated_vendor.name = payload['name']
+        vendor.name = payload['name']
     except:
         pass
     try:
-        updated_vendor.address = payload['address']
+        vendor.address = payload['address']
     except:
         pass
     try:
-       updated_vendor.phone_number = payload['phone_number']
+        vendor.phone_number = payload['phone_number']
     except:
         pass
     try:
-        updated_vendor.email = payload['email']
+        vendor.email = payload['email']
     except:
         pass
     try:
-        updated_vendor.notes = payload['notes']
+        vendor.notes = payload['notes']
     except:
         pass
-    VendorModel.save_to_db(updated_vendor)
-    return VendorModel.query_vendor_by_kwargs(**updated_vendor)
+    VendorModel.save_to_db(vendor)
+    return VendorModel.query_vendor_by_kwargs(**payload)
 
 
 
