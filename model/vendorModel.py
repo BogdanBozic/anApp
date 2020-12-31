@@ -83,9 +83,11 @@ class VendorModel(Base):
         else:
             return True, ''
 
-    def add_to_db(self):
-        session.add(self)
-        session.commit()
+    def save_to_db(self):
+        if self not in session:
+            session.add(self)
+            session.commit()
+
 
     def put_to_db(self):
         pass
