@@ -1,7 +1,7 @@
 from db import Base, session
 from sqlalchemy import Integer, String, Date, ForeignKey, Column
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm import relationship, backref
+from flask import jsonify
 
 
 class VendorModel(Base):
@@ -41,22 +41,23 @@ class VendorModel(Base):
 
     @classmethod
     def query_vendor_by_kwargs(cls, *args, **kwargs):
+        # import ipdb; ipdb.set_trace()
         try:
             list_of_vendors = session.query(cls).filter_by(**kwargs).all()
         except InvalidRequestError as e:
             error = e._message()
             return error[-6:]
-        return cls.jsonify_list_of_vendors(list_of_vendors)
+        return cls.jsonify_vendor(list_of_vendors)
 
     @classmethod
     def jsonify_vendor(cls, vendor):
-        return {
-            "name": cls.name,
-            "phone_number": cls.phone_number,
-            "email": cls.email,
-            "address": cls.address,
-            "notes": cls.notes
-        }
+        return jsonify({
+            "name": vendor[0].name,
+            "phone_number": vendor[0].phone_number,
+            "email": vendor[0].email,
+            "address": vendor[0].address,
+            "notes": vendor[0].notes
+        })
 
     @classmethod
     def jsonify_list_of_vendors(cls, list_of_vendors):

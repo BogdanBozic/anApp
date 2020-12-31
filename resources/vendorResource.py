@@ -22,7 +22,7 @@ def get_vendor_by_kwargs():
     response = VendorModel.query_vendor_by_kwargs(**dictionary)
     if type(response) == str:
         return jsonify({'error': 'attribute with name {} does not exist'.format(response)}), 400
-    if not response['vendors']:
+    if not response:#['vendors']:
         return jsonify({'error': 'Vendor not found.'}), 404
     return response
 
@@ -53,9 +53,14 @@ def post():
 
 @vendor_blueprint.route('/vendors/<int:id>', methods=['PUT'])
 def edit_vendor(id):
+    # import ipdb; ipdb.set_trace()
     payload = request.get_json()
     if not get_vendor_by_id(id):
         return jsonify({'error': 'Vendor with id {} does not exist.'.format(id)}), 404
+
+    if VendorModel.query_vendor_by_kwargs(**payload)['vendors']:
+        return jsonify({'error': 'Invalid arguments or Vendor with this info already exists'}), 400
+
     vendor = VendorModel.query_vendor_by_id(id)
     try:
         vendor.name = payload['name']
