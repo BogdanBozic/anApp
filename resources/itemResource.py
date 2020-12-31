@@ -45,7 +45,7 @@ def post():
     except KeyError as error:
         return jsonify({'error': "Missing required attribute {}".format(error)}), 400
 
-    ItemModel.save_to_db(new_item)
+    ItemModel.add_to_db(new_item)
     return ItemModel.get_item_by_name_and_vendor_id(name=new_item.name, vendor_id=new_item.vendor_id).json()
     # return jsonify(payload)
 

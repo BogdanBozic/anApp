@@ -89,6 +89,7 @@ class VendorModel(Base):
             session.commit()
 
 
+
     def put_to_db(self):
         pass
 

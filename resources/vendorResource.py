@@ -45,8 +45,8 @@ def post():
         new_vendor = VendorModel(name=payload['name'], phone_number=payload['phone_number'], email=payload['email'],
                                  address=payload['address'], notes=payload['notes'])
 
-        VendorModel.add_to_db(new_vendor)
-        return VendorModel.query_vendor_by_email(payload['email']).json()
+        VendorModel.save_to_db(new_vendor)
+        return VendorModel.query_vendor_by_kwargs(**{'email': payload['email']})
     else:
         return jsonify({'error': "Vendor with this {} already exists.".format(vendor_exists_error_message)}), 400
 
@@ -57,6 +57,28 @@ def edit_vendor(id):
     if not get_vendor_by_id(id):
         return jsonify({'error': 'Vendor with id {} does not exist.'.format(id)}), 404
     updated_vendor = VendorModel
+    try:
+        updated_vendor.name = payload['name']
+    except:
+        pass
+    try:
+        updated_vendor.address = payload['address']
+    except:
+        pass
+    try:
+       updated_vendor.phone_number = payload['phone_number']
+    except:
+        pass
+    try:
+        updated_vendor.email = payload['email']
+    except:
+        pass
+    try:
+        updated_vendor.notes = payload['notes']
+    except:
+        pass
+    VendorModel.save_to_db(updated_vendor)
+    return VendorModel.query_vendor_by_kwargs(**updated_vendor)
 
 
 
