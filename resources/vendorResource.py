@@ -1,4 +1,4 @@
-from flask import request, jsonify, make_response
+from flask import request, jsonify
 from model.vendorModel import VendorModel
 from flask import Blueprint
 
@@ -22,7 +22,7 @@ def get_vendor_by_kwargs():
     response = VendorModel.query_vendor_by_kwargs(**dictionary)
     if type(response) == str:
         return jsonify({'error': 'attribute with name {} does not exist'.format(response)}), 400
-    if not response:#['vendors']:
+    if not response:
         return jsonify({'error': 'Vendor not found.'}), 404
     return response
 
@@ -53,35 +53,29 @@ def post():
 
 @vendor_blueprint.route('/vendors/<int:id>', methods=['PUT'])
 def edit_vendor(id):
-    # import ipdb; ipdb.set_trace()
     payload = request.get_json()
     if not get_vendor_by_id(id):
         return jsonify({'error': 'Vendor with id {} does not exist.'.format(id)}), 404
 
     vendor = VendorModel.query_vendor_by_id(id)
-    exists = False
     no_arguments = True
     try:
         vendor.name = payload['name']
-        exists = True
         no_arguments = False
     except:
         pass
     try:
         vendor.address = payload['address']
-        exists = True
         no_arguments = False
     except:
         pass
     try:
         vendor.phone_number = payload['phone_number']
-        exists = True
         no_arguments = False
     except:
         pass
     try:
         vendor.email = payload['email']
-        exists = True
         no_arguments = False
     except:
         pass
