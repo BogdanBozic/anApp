@@ -1,6 +1,6 @@
 from db import Base, session
 from sqlalchemy import Integer, String, Date, ForeignKey, Column
-from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.exc import InvalidRequestError, IntegrityError
 from flask import jsonify
 
 
@@ -85,6 +85,11 @@ class VendorModel(Base):
             return True, ''
 
     def save_to_db(self):
+        import ipdb; ipdb.set_trace()
         # if self not in session:
         session.add(self)
-        session.commit()
+        try:
+            session.commit()
+        except IntegrityError as e:
+            session.close()
+            return e.params

@@ -58,32 +58,49 @@ def edit_vendor(id):
     if not get_vendor_by_id(id):
         return jsonify({'error': 'Vendor with id {} does not exist.'.format(id)}), 404
 
-    if VendorModel.query_vendor_by_kwargs(**payload)['vendors']:
-        return jsonify({'error': 'Invalid arguments or Vendor with this info already exists'}), 400
-
     vendor = VendorModel.query_vendor_by_id(id)
+    exists = False
+    no_arguments = True
     try:
         vendor.name = payload['name']
+        exists = True
+        no_arguments = False
     except:
         pass
     try:
         vendor.address = payload['address']
+        exists = True
+        no_arguments = False
     except:
         pass
     try:
         vendor.phone_number = payload['phone_number']
+        exists = True
+        no_arguments = False
     except:
         pass
     try:
         vendor.email = payload['email']
+        exists = True
+        no_arguments = False
     except:
         pass
     try:
         vendor.notes = payload['notes']
+        no_arguments = False
     except:
         pass
-    VendorModel.save_to_db(vendor)
-    return VendorModel.query_vendor_by_kwargs(**payload)
+
+    if no_arguments:
+        return jsonify({'error': 'No valid arguments provided.'}), 400
+    # import ipdb; ipdb.set_trace()
+    # if exists:
+    #     if VendorModel.query_vendor_by_kwargs(**payload):
+    #         return jsonify({'error': 'Invalid arguments or Vendor with this info already exists'}), 400
+    submit = VendorModel.save_to_db(vendor)
+    if type(submit) == tuple:
+        return jsonify({'error': 'Vendor with {} already exists.'.format(submit[0])}), 400
+    return VendorModel.query_vendor_by_id(id).json()
 
 
 
