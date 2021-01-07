@@ -6,15 +6,12 @@ from flask import jsonify
 
 class VendorModel(Base):
     __tablename__ = 'vendors'
-    # __table_args__ = {'extend_existing': True}
     id = Column(Integer, unique=True, primary_key=True)
     name = Column(String(20), unique=True, nullable=False)
     phone_number = Column(Integer, nullable=False, unique=True)
     email = Column(String, unique=True, nullable=False)
     address = Column(String, unique=True, nullable=False)
     notes = Column(String, nullable=True)
-
-    # items = relationship('Item', backref=backref('vendors'))
 
     def __init__(self, name, phone_number, email, address, notes):
         # self.id = _id
@@ -85,8 +82,6 @@ class VendorModel(Base):
             return True, ''
 
     def save_to_db(self):
-        import ipdb; ipdb.set_trace()
-        # if self not in session:
         session.add(self)
         try:
             session.commit()

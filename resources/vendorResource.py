@@ -87,18 +87,8 @@ def edit_vendor(id):
 
     if no_arguments:
         return jsonify({'error': 'No valid arguments provided.'}), 400
-    # import ipdb; ipdb.set_trace()
-    # if exists:
-    #     if VendorModel.query_vendor_by_kwargs(**payload):
-    #         return jsonify({'error': 'Invalid arguments or Vendor with this info already exists'}), 400
+
     submit = VendorModel.save_to_db(vendor)
     if type(submit) == tuple:
         return jsonify({'error': 'Vendor with {} already exists.'.format(submit[0])}), 400
     return VendorModel.query_vendor_by_id(id).json()
-
-
-
-    """
-    ЗАВРШАВАЈ ОВО, СИРОТИЉО
-    """
-
