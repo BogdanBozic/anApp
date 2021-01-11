@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+<!--
+<html>
+<head>
+<style>
+.index {
+  background-color: green;
+  color: white;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+-->
+{% block title %}
+anApp Vendors
+{% endblock %}
+
+{% block page_content %}
+<div class="index">
+  <h2>Vendors</h2>
+   <table style="width:100%">
+   <tr>
+       {% for key in vendors['vendors'][0] %}
+       <th>{{ key }}</th>
+       {% endfor %}
+   </tr>
+
+   {% for vendor in vendors['vendors'] %}
+   <tr>
+       {% for key in vendor %}
+       <td>{{ vendor[key] }}</td>
+       {% endfor %}
+   </tr>
+   {% endfor %}
+</table>
+</div>
+{% endblock %}
+<!--
+</body>
+</html>
+-->

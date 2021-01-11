@@ -1,11 +1,11 @@
 from flask import request, jsonify
 from model.vendorModel import VendorModel
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 vendor_blueprint = Blueprint('vendor_blueprint', __name__)
 
 
-@vendor_blueprint.route('/vendors/<int:id>', methods=['GET'])
+@vendor_blueprint.route('/api/vendors/<int:id>', methods=['GET'])
 def get_vendor_by_id(id):
     vendor = VendorModel.query_vendor_by_id(id)
     if vendor:
@@ -14,7 +14,7 @@ def get_vendor_by_id(id):
         return jsonify({'message': 'Vendor with id {} not found'.format(id)})
 
 
-@vendor_blueprint.route('/vendors', methods=['GET'])
+@vendor_blueprint.route('/api/vendors', methods=['GET'])
 def get_vendor_by_kwargs():
     if not request.args:
         return VendorModel.query_vendors()
@@ -27,7 +27,7 @@ def get_vendor_by_kwargs():
     return response
 
 
-@vendor_blueprint.route('/vendors', methods=['POST'])
+@vendor_blueprint.route('/api/vendors', methods=['POST'])
 def post():
     payload = request.get_json()
     try:
@@ -51,7 +51,7 @@ def post():
         return jsonify({'error': "Vendor with this {} already exists.".format(vendor_exists_error_message)}), 400
 
 
-@vendor_blueprint.route('/vendors/<int:id>', methods=['PUT'])
+@vendor_blueprint.route('/api/vendors/<int:id>', methods=['PUT'])
 def edit_vendor(id):
     payload = request.get_json()
     if not get_vendor_by_id(id):
@@ -92,3 +92,7 @@ def edit_vendor(id):
     if type(submit) == tuple:
         return jsonify({'error': 'Vendor with {} already exists.'.format(submit[0])}), 400
     return VendorModel.query_vendor_by_id(id).json()
+
+@vendor_blueprint.route('/vendors', methods=['GET'])
+def vendors():
+    return render_template('vendor.html', vendors=get_vendor_by_kwargs())
