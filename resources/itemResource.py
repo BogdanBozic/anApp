@@ -8,7 +8,7 @@ import ipdb
 item_blueprint = Blueprint('item_blueprint', __name__)
 
 
-@item_blueprint.route('/items', methods=['GET'])
+@item_blueprint.route('/api/items', methods=['GET'])
 def get_items():
     # if not request.args:
     return ItemModel.get_items().json()
@@ -20,7 +20,7 @@ def get_items():
     #     return items
 
 
-@item_blueprint.route('/items/<int:id>', methods=['GET'])
+@item_blueprint.route('/api/items/<int:id>', methods=['GET'])
 def get(id):
     # import ipdb; ipdb.set_trace()
     item = ItemModel.get_item_by_id(id)
@@ -30,7 +30,7 @@ def get(id):
         return jsonify({"message": "Item not found"}), 404
 
 
-@item_blueprint.route('/items', methods=['POST'])
+@item_blueprint.route('/api/items', methods=['POST'])
 def post():
     # import ipdb; ipdb.set_trace()
     payload = request.get_json()
